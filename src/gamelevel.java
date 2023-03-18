@@ -2,16 +2,35 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
+
+
 public class gamelevel {
+    /**
+     * levelnumber indique c'est quelle niveau
+     * exit est un boolean qui indique si le joueur a fait !
+     * map est la carte de jeu
+     * piecelist est la liste des pieces de jeu
+     * errortype indique si il y a eu une erreur si la valeur n'est pas 0
+     * levelcompleted indique si le niveau est completer
+     */
     int levelnumber;
     boolean exit = false;
     gamemap map;
-    String mapdisplay;
     gamepiece piecelist[];
-    String currentmapdisplay[][];
     int errortype = 0;
     boolean levelcompleted = false;
+
+    /**
+     * @param number est le numero du niveau et est connue et verifier car on a verifier que le fichier existe dans gamelist
+     *
+     */
     public gamelevel(int number) {
+        /**
+         *
+         * Parcours le fichier et creer les objets de carte et pieces
+         * Il indique si il y a eu une erreur dans errortype
+         * le try assure que le est au cas ou que le fichier n'existe pas, meme si c'est impossible si il est rendu ici
+         */
         try {
             levelnumber = number;
             String fileName = "niveaux/niveau"+ levelnumber+".txt";
@@ -80,7 +99,18 @@ public class gamelevel {
             System.out.println("Fichier non-existant");
         }
     }
+
+    /**
+     * @param piecenumber numero du piece dans la liste
+     * @param xcoord coordonee x dans la carte
+     * @param ycoord coordonee y dans la carte
+     */
     public void addpiecevaldation(int piecenumber, int xcoord, int ycoord){
+
+        /**
+         * verifie que la piece peut etre mis dans l'endroit indiquer par le joueur, et si oui, le fait.
+         *
+         */
         int xcoordpointer = xcoord;
         int ycoordpointer = ycoord;
         int piecexcoord = 0;
@@ -116,7 +146,16 @@ public class gamelevel {
             placepiece(piecenumber, xcoord, ycoord);
         }
     }
+
+    /**
+     * @param piecenumber numero de piece dans la liste
+     * @param xcoord coordonee x dans la carte
+     * @param ycoord coordonee y dans la carte
+     */
     public void placepiece(int piecenumber, int xcoord, int ycoord) {
+        /**
+         * Change les valeur dans la formation de l'objectformation dans l'objet de la carte selon le numero de l'objet.
+         */
         int piecexcoord = 0;
         int pieceycoord = 0;
         while (pieceycoord < piecelist[piecenumber].objectformation.length){
@@ -130,7 +169,15 @@ public class gamelevel {
             piecexcoord=0;
         }
     }
+
+    /**
+     * @param piecenumber numero de la piece dans la liste
+     */
     public void removepiece(int piecenumber) {
+
+        /**
+         * Enleve la piece si il est sur la carte.
+         */
         if (piecelist[piecenumber].used == true) {
             int xcoord = piecelist[piecenumber].coordinates[0];
             int ycoord = piecelist[piecenumber].coordinates[1];
@@ -151,14 +198,31 @@ public class gamelevel {
             System.out.println("Piece pas utiliser");
         }
     }
+
+    /**
+     * @param piecenumber numero de la piece
+     * @param xcoord coordonnee x
+     * @param ycoord coordonee y
+     */
     public void movepiece(int piecenumber, int xcoord, int ycoord){
+        /**
+         * Si la piece est deja utiliser, ca l'enleve, et le place de nouveau, si c'est impossible c'a le replace
+         * Dans le else, ca fait juste essayer de placer
+         */
         if (piecelist[piecenumber].used == true) {
             removepiece(piecenumber);
+            piecelist[piecenumber].used = true;
             addpiecevaldation(piecenumber, xcoord, ycoord);
+
         } else {
+
             addpiecevaldation(piecenumber, xcoord, ycoord);
         }
     }
+
+    /**
+     * Montre le niveau
+     */
      public void displaylevel(){
          String charliststring = "█ABCDEFGHIJKLMNOPQRSTUVWXYZ░";
          String displayarray[] = new String [map.objectformation.length+3];
@@ -235,6 +299,11 @@ public class gamelevel {
          }
          System.out.println("! pour quitter >>" );
      }
+
+    /**
+     * Capabilite d'entrer les commandes
+     * @param commandin la commande
+     */
      public void command(String commandin) {
          String charliststring = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
          String commandincharlist[] = commandin.split("");
@@ -247,7 +316,7 @@ public class gamelevel {
              if (commandincharlist[0].equals("!")) {
                 exit = true;
              } else {
-                 char1num = 25 - charliststring.indexOf(commandincharlist[0]);
+                 char1num = 25 - (charliststring).indexOf(commandincharlist[0].toUpperCase());
                  if (char1num > piecelist.length || char1num == -1) {
                      System.out.println("Piece Invalid");
                  } else {
@@ -255,12 +324,12 @@ public class gamelevel {
                  }
              }
          } else if (commandin.length() == 3) {
-             char1num =  25 - charliststring.indexOf(commandincharlist[0]);
+             char1num =  25 - charliststring.indexOf(commandincharlist[0].toUpperCase());
              if (char1num > piecelist.length){
                  System.out.println("Piece Invalid");
              } else {
                  try {
-                 char2num =  charliststring.indexOf(commandincharlist[1]);
+                 char2num =  (charliststring).indexOf(commandincharlist[1].toUpperCase());
                  char3num =  Integer.parseInt(commandincharlist[2]) - 1;
                  if (char3num >= 0 && char2num >= 0){
                      movepiece(char1num,char2num,char3num);
@@ -268,9 +337,15 @@ public class gamelevel {
                      System.out.println("Commande Invalid");
                  }
              }
+         } else {
+             System.out.println("Commande Invalid");
          }
      }
-     public void levelcompletecheck() {
+
+    /**
+     * Verifie si le niveau est fini
+     */
+    public void levelcompletecheck() {
         levelcompleted = true;
         int i = 0;
         while (i < piecelist.length){
@@ -281,6 +356,9 @@ public class gamelevel {
             i+=1;
         }
     }
+    /**
+     * Joue le niveau
+     */
     public void playlevel() {
         String inputstr;
         Scanner sc = new Scanner(System.in);
@@ -294,6 +372,11 @@ public class gamelevel {
             }
         }
     }
+
+    /**
+     * permet de utiliser fichier de commandes
+     * @param fileName fichier de commande
+     */
     public void runscript(String fileName){
         String currentline;
         try {

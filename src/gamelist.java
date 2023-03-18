@@ -2,9 +2,26 @@
 import java.io.File;
 import java.util.Scanner;
 public class gamelist {
+    /**
+     * List d'objet de niveau
+     */
     gamelevel[] levellist = new gamelevel[10];
+    /**
+     * Boolean qui indique si il y a une erreur
+     */
     boolean errorcheck = false;
+    /**
+     * Boolean qui indique si il a eu une erreur lors du chargement
+     */
     boolean exitbool = false;
+
+    /**
+     * Va a travers les fichiers
+     * Si il manque un fichier, le jeu s'arrete et demande de mettre les 10 niveaux
+     * Verifie si il y a eu un erreur dans les niveaux en regardant errortype
+     * Quitte le while si un fichier manque ou il y a eu une erreur dans le chargement
+     * Si il n'y a pas d'erreur, il inscrit "Importation complet" et permet de continuer au jeu.
+     */
     public gamelist() {
         String filename = "";
         int levelpointer = 0;
@@ -24,6 +41,12 @@ public class gamelist {
             System.out.println("Importation des fichiers complet");
         }
     }
+
+    /**
+     * Debut du jeu
+     * Page intro et apres commence le jeux en utilisant la methode .playlevel de la classe niveau.
+     * Quitte si le joueur a voulu quiter en regardant le boolean exit boolean.
+     */
     public void playgame(){
         int currentlevelpointer = 0;
         Scanner sc = new Scanner(System.in);

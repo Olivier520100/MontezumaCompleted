@@ -1,6 +1,16 @@
 public class gamemap extends gameobject{
-    String currentmap[][];
+
+    /**
+     * @param size meme que dans gameobject
+     * @param formation meme que dans gameobject
+     */
     public gamemap(String size, String formation) {
+        /**
+         * cela change toute les valeurs de 1 a 100
+         * Pourquoi?
+         * Quand on affiche la carte, ca va etre beaucoup plus facile de distinguer quelles sont les murs au non des pieces.
+         * Ca ne le fait pas si il avait une erreur avant.
+         */
         super(size, formation);
         int i = 0;
         int j = 0;
